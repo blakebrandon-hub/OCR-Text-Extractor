@@ -1,5 +1,4 @@
 Flask
-pytesseract
 opencv-python
 pillow
 gunicorn
