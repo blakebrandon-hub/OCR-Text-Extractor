@@ -11,9 +11,13 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Set local tesseract binary path (for Windows)
-pytesseract.pytesseract.tesseract_cmd = os.path.abspath("tesseract/tesseract.exe")
-os.environ["TESSDATA_PREFIX"] = os.path.abspath("tesseract/tessdata")
+if 'DYNO' in os.environ:
+    # Heroku: Use Linux path to apt-installed binary
+    pytesseract.pytesseract.tesseract_cmd = "/app/.apt/usr/bin/tesseract"
+else:
+    # Local (Windows or others): Use bundled or system-installed path
+    pytesseract.pytesseract.tesseract_cmd = os.path.join(os.getcwd(), "tesseract", "tesseract.exe")
+    os.environ["TESSDATA_PREFIX"] = os.path.join(os.getcwd(), "tesseract", "tessdata")
 
 @app.route('/')
 def index():
@@ -59,3 +63,4 @@ def upload():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
