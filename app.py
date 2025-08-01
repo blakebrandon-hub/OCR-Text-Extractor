@@ -12,8 +12,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if 'DYNO' in os.environ:
-    # Heroku: Use Linux path to apt-installed binary
     pytesseract.pytesseract.tesseract_cmd = "/app/.apt/usr/bin/tesseract"
+    os.environ["TESSDATA_PREFIX"] = "/app/.apt/usr/share/tesseract-ocr/4.00/"
 else:
     # Local (Windows or others): Use bundled or system-installed path
     pytesseract.pytesseract.tesseract_cmd = os.path.join(os.getcwd(), "tesseract", "tesseract.exe")
@@ -63,4 +63,5 @@ def upload():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
